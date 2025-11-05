@@ -5,7 +5,7 @@
   "main": "App.jsx",
   "scripts": {
     "start": "serve",
-    "build": "esbuild App.jsx --bundle --outfile=build/bundle.js --loader:.js=jsx"
+    "build": "if not exist build mkdir build && esbuild App.jsx --bundle --outfile=build/bundle.js --loader:.js=jsx && copy index.html build/index.html"
   },
   "dependencies": {
     "react": "^18.2.0",

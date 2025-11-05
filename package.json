@@ -5,7 +5,7 @@
   "main": "App.jsx",
   "scripts": {
     "start": "serve",
-    "build": "esbuild App.jsx --bundle --outfile=dist/bundle.js --loader:.js=jsx"
+    "build": "esbuild App.jsx --bundle --outfile=build/bundle.js --loader:.js=jsx"
   },
   "dependencies": {
     "react": "^18.2.0",

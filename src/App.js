@@ -292,13 +292,11 @@ export default function App() {
     } catch (e) { console.warn('Self‑tests error:', e); }
   }, []);
 
-  const wrapperCls = dark
-    ? "min-h-screen w-full flex items-center justify-center bg-[#0b1020] text-slate-100 p-6"
-    : "min-h-screen w-full flex items-center justify-center bg-slate-50 text-slate-900 p-6";
+  
 
   return (
-    <div className={wrapperCls}>
-      <div className="max-w-5xl w-full grid grid-cols-1 gap-4">
+    <div className={dark ? "bg-[#0b1020] text-slate-100" : "bg-slate-50 text-slate-900"}>
+      <div className="container mx-auto p-4">
         <header className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold">Five‑Dot Lines — Solo</h1>
           <div className="flex items-center gap-3 text-sm">

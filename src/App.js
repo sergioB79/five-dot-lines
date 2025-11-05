@@ -310,79 +310,86 @@ export default function App() {
           </div>
         </header>
 
-        <p className="text-sm text-slate-600 dark:text-slate-200 bg-white/80 dark:bg-white/10 p-3 rounded-xl shadow">{gameOver ? (
-          <>Game over — no legal moves remain. Final score: <b>{score}</b>.</>
-        ) : (
-          <>{message} {hover.lines > 0 && <span className="ml-2 text-emerald-600">(Hover spot would score +{hover.lines})</span>}</>
-        )}</p>
+        <p className="text-sm text-slate-600 dark:text-slate-200 bg-white/80 dark:bg-white/10 p-3 rounded-xl shadow">
+          {gameOver ? (
+            <>Game over — no legal moves remain. Final score: <b>{score}</b>.</>
+          ) : (
+            <>{message} {hover.lines > 0 && <span className="ml-2 text-emerald-600">(Hover spot would score +{hover.lines})</span>}</>
+          )}
+        </p>
 
-        <div className="overflow-auto bg-white/90 dark:bg-white/5 rounded-2xl shadow" style={{ padding: PADDING }}>
-          <svg
-            width={N * CELL}
-            height={N * CELL}
-            viewBox={`0 0 ${N * CELL} ${N * CELL}`}
-            onClick={handleSvgClick}
-          >
-            {/* grid */}
-            <g>
-              {Array.from({ length: N }).map((_, i) => (
-                <line key={`h${i}`} x1={0} y1={i * CELL + CELL/2} x2={N * CELL} y2={i * CELL + CELL/2} stroke="#e5e7eb" />
-              ))}
-              {Array.from({ length: N }).map((_, i) => (
-                <line key={`v${i}`} y1={0} x1={i * CELL + CELL/2} y2={N * CELL} x2={i * CELL + CELL/2} stroke="#e5e7eb" />
-              ))}
-            </g>
-
-            {/* dots & hit areas */}
-            {board.map((row, y) => row.map((v, x) => {
-              const cx = x * CELL + CELL/2, cy = y * CELL + CELL/2;
-              const isHover = hover.x === x && hover.y === y && v === 0 && hover.lines > 0 && !gameOver;
-              return (
-                <g key={`c${x}-${y}`} transform={`translate(${cx}, ${cy})`}>
-                  <rect x={-CELL/2} y={-CELL/2} width={CELL} height={CELL} fill="transparent"
-                        onMouseEnter={() => onHover(x, y)}
-                        onMouseLeave={() => setHover({ x: -1, y: -1, lines: 0 })}
-                        onClick={(e) => { e.stopPropagation(); handleCellClick(x, y); }}
-                        style={{ cursor: gameOver ? 'default' : 'pointer' }} />
-                  {v === 0 && isHover && (<circle r={9} fill="#10b981" opacity={0.7} />)}
-                  {v === 1 && (<circle r={7.5} fill="#ef4444" />)}
+        <div className="flex flex-wrap">
+          <div className="w-full md:w-1/2 p-2">
+            <div className="overflow-auto bg-white/90 dark:bg-white/5 rounded-2xl shadow" style={{ padding: PADDING }}>
+              <svg
+                width={N * CELL}
+                height={N * CELL}
+                viewBox={`0 0 ${N * CELL} ${N * CELL}`}
+                onClick={handleSvgClick}
+              >
+                {/* grid */}
+                <g>
+                  {Array.from({ length: N }).map((_, i) => (
+                    <line key={`h${i}`} x1={0} y1={i * CELL + CELL/2} x2={N * CELL} y2={i * CELL + CELL/2} stroke="#e5e7eb" />
+                  ))}
+                  {Array.from({ length: N }).map((_, i) => (
+                    <line key={`v${i}`} y1={0} x1={i * CELL + CELL/2} y2={N * CELL} x2={i * CELL + CELL/2} stroke="#e5e7eb" />
+                  ))}
                 </g>
-              );
-            }))}
 
-            {/* scoring segments (drawn above dots) */}
-            {segments.map((s, i) => (
-              <line key={`seg${i}`}
-                    x1={s.x1 * CELL + CELL/2}
-                    y1={s.y1 * CELL + CELL/2}
-                    x2={s.x2 * CELL + CELL/2}
-                    y2={s.y2 * CELL + CELL/2}
-                    stroke="#111827"
-                    strokeWidth={i >= segments.length - flashCount ? 5 : 3}
-                    strokeOpacity={i >= segments.length - flashCount ? 0.85 : 1}
-                    strokeLinecap="round" />
-            ))}
+                {/* dots & hit areas */}
+                {board.map((row, y) => row.map((v, x) => {
+                  const cx = x * CELL + CELL/2, cy = y * CELL + CELL/2;
+                  const isHover = hover.x === x && hover.y === y && v === 0 && hover.lines > 0 && !gameOver;
+                  return (
+                    <g key={`c${x}-${y}`} transform={`translate(${cx}, ${cy})`}>
+                      <rect x={-CELL/2} y={-CELL/2} width={CELL} height={CELL} fill="transparent"
+                            onMouseEnter={() => onHover(x, y)}
+                            onMouseLeave={() => setHover({ x: -1, y: -1, lines: 0 })}
+                            onClick={(e) => { e.stopPropagation(); handleCellClick(x, y); }}
+                            style={{ cursor: gameOver ? 'default' : 'pointer' }} />
+                      {v === 0 && isHover && (<circle r={9} fill="#10b981" opacity={0.7} />)}
+                      {v === 1 && (<circle r={7.5} fill="#ef4444" />)}
+                    </g>
+                  );
+                }))}
 
-            {/* one‑time revealed legal moves */}
-            {revealUsed && revealedMoves.map((m, i) => (
-              <g key={`rev${i}`} transform={`translate(${m.x * CELL + CELL/2}, ${m.y * CELL + CELL/2})`}>
-                <circle r={7} fill="none" stroke="#2563eb" strokeDasharray="2 2" />
-                <text x={0} y={4} fontSize="10" textAnchor="middle" fill="#2563eb">{m.count}</text>
-              </g>
-            ))}
-          </svg>
+                {/* scoring segments (drawn above dots) */}
+                {segments.map((s, i) => (
+                  <line key={`seg${i}`}
+                        x1={s.x1 * CELL + CELL/2}
+                        y1={s.y1 * CELL + CELL/2}
+                        x2={s.x2 * CELL + CELL/2}
+                        y2={s.y2 * CELL + CELL/2}
+                        stroke="#111827"
+                        strokeWidth={i >= segments.length - flashCount ? 5 : 3}
+                        strokeOpacity={i >= segments.length - flashCount ? 0.85 : 1}
+                        strokeLinecap="round" />
+                ))}
+
+                {/* one‑time revealed legal moves */}
+                {revealUsed && revealedMoves.map((m, i) => (
+                  <g key={`rev${i}`} transform={`translate(${m.x * CELL + CELL/2}, ${m.y * CELL + CELL/2})`}>
+                    <circle r={7} fill="none" stroke="#2563eb" strokeDasharray="2 2" />
+                    <text x={0} y={4} fontSize="10" textAnchor="middle" fill="#2563eb">{m.count}</text>
+                  </g>
+                ))}
+              </svg>
+            </div>
+          </div>
+          <div className="w-full md:w-1/2 p-2">
+            <section className="text-sm text-slate-700 dark:text-slate-200 leading-6 bg-white/80 dark:bg-white/10 rounded-2xl p-4 shadow h-full">
+              <h2 className="font-semibold mb-2">Rules Recap</h2>
+              <ul className="list-disc ml-5">
+                <li>Place one dot per move on an empty intersection.</li>
+                <li>Your placement must create at least one straight line of <b>five</b> consecutive dots that includes the new dot.</li>
+                <li>No overlap on the <b>same axis</b> with previously scored fives.</li>
+                <li>Up to <b>2 lines per axis per move</b> (two distinct 5‑windows including the new dot). Multiple axes may score.</li>
+                <li>The game ends when no legal move exists.</li>
+              </ul>
+            </section>
+          </div>
         </div>
-
-        <section className="text-sm text-slate-700 dark:text-slate-200 leading-6 bg-white/80 dark:bg-white/10 rounded-2xl p-4 shadow">
-          <h2 className="font-semibold mb-2">Rules Recap</h2>
-          <ul className="list-disc ml-5">
-            <li>Place one dot per move on an empty intersection.</li>
-            <li>Your placement must create at least one straight line of <b>five</b> consecutive dots that includes the new dot.</li>
-            <li>No overlap on the <b>same axis</b> with previously scored fives.</li>
-            <li>Up to <b>2 lines per axis per move</b> (two distinct 5‑windows including the new dot). Multiple axes may score.</li>
-            <li>The game ends when no legal move exists.</li>
-          </ul>
-        </section>
 
         <footer className="text-xs text-slate-500 dark:text-slate-400 text-center pb-2">Prototype — React + SVG. Ready for Tauri/Electron packaging.</footer>
       </div>

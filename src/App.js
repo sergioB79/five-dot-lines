@@ -295,7 +295,7 @@ export default function App() {
   
 
   return (
-    <div className={(dark ? "bg-[#0b1020] text-slate-100" : "bg-slate-50 text-slate-900") + " border-4 border-red-500"}>
+    <div className={dark ? "bg-[#0b1020] text-slate-100" : "bg-slate-50 text-slate-900"}>
       <div className="container mx-auto p-4">
         <header className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold">Five‑Dot Lines — Solo</h1>
